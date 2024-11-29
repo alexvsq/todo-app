@@ -1,3 +1,4 @@
+'use client'
 import { use, useEffect, useState } from 'react'
 import CardTask from '@/app/components/CardTask'
 import Calendar from './Calendar'
@@ -25,7 +26,6 @@ export default function ContentCenter() {
     useEffect(() => {
         const { state: filterByState, order: filterByOrder, search } = filters;
 
-        // Filtrado inicial por búsqueda
         let newListFiltered = listTasks.filter((task) => {
             const lowerSearch = search.toLowerCase();
             return (
@@ -34,17 +34,14 @@ export default function ContentCenter() {
             );
         });
 
-        // Filtrar por estado, si es diferente de 3
         if (filterByState == 0 || filterByState == 1 || filterByState == 2) {
             newListFiltered = newListFiltered.filter((task) => task.state === filterByState);
         }
 
-        // Ordenar por orden inverso si se especifica
         if (filterByOrder === 1) {
-            newListFiltered = [...newListFiltered].reverse(); // Crear una copia antes de invertir
+            newListFiltered = newListFiltered.toReversed(); // Crear una copia antes de invertir
         }
 
-        // Actualizar el estado filtrado
         setListFiltered(newListFiltered);
     }, [filters, listTasks]);
     useEffect(() => {

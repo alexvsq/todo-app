@@ -1,3 +1,4 @@
+'use client'
 import { useState, useContext, ReactNode, createContext, useEffect } from 'react'
 import { Task, actionTask, initialState, Filters } from '@/app/types/types'
 
