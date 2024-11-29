@@ -8,11 +8,13 @@ export default function page() {
 
     const [logInfo, setLogInfo] = useState({
         email: '',
-        password: ''
+        password: '',
+        passwordRepeat: '',
     })
 
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if (logInfo.password !== logInfo.passwordRepeat) return toast.error('Las contraseñas no coinciden')
         try {
             const res = await createUserWithEmailAndPassword(auth, logInfo.email, logInfo.password)
             if (!res.user) toast.error('No se pudo registrar')
@@ -26,7 +28,11 @@ export default function page() {
     }
 
     return (
-        <form action="#" onSubmit={(e) => submitForm(e)}>
+        <form
+            action="#"
+            className=' flex flex-col gap-2'
+            onSubmit={(e) => submitForm(e)}
+        >
             <label htmlFor="email" className='text-xl text-bluePrimary font-semibold'>Correo Electrónico</label>
             <input
                 onChange={(e) => setLogInfo({ ...logInfo, email: e.target.value })}
@@ -37,13 +43,21 @@ export default function page() {
             <input
                 onChange={(e) => setLogInfo({ ...logInfo, password: e.target.value })}
                 className='bg-background rounded-2xl px-4 py-2 text-sm w-full'
-                type="password" placeholder='Contraseña'
+                type="password" name='password' placeholder='Contraseña'
             />
-            <button
-                type="submit"
-                className='bg-bluePrimary text-white px-4 py-2 rounded-2xl'>
-                Registrarse
-            </button>
+            <label htmlFor="repeatPassword" className='text-xl text-bluePrimary font-semibold'>Repetir Contraseña</label>
+            <input
+                onChange={(e) => setLogInfo({ ...logInfo, passwordRepeat: e.target.value })}
+                className='bg-background rounded-2xl px-4 py-2 text-sm w-full'
+                type="password" name='repeatPassword' placeholder='Repetir Contraseña'
+            />
+            <footer className=' my-2'>
+                <button
+                    type="submit"
+                    className='bg-bluePrimary text-white px-4 py-2 rounded-2xl'>
+                    Registrarse
+                </button>
+            </footer>
         </form>
     )
 }

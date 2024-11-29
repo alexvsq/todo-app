@@ -5,6 +5,7 @@ import { User, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase';
 import { tasksCollectionRef, db } from '@/app/firebase'
 import { getDocs, deleteDoc, serverTimestamp, doc, setDoc, updateDoc, query, where } from 'firebase/firestore';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 
 interface ContextType {
     userInfo: User | null;
@@ -15,6 +16,7 @@ interface ContextType {
     addTaskToFirebase: (task: Task) => Promise<void | string>;
     updateTaskToFirebase: (taskId: string, updatedFields: Partial<Task>) => Promise<void>;
     deleteTaskToFirebase: (taskId: string) => Promise<void>;
+    signInWithGoogle: () => Promise<void>;
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -84,7 +86,16 @@ function ContextProvider({ children }: ContextProviderProps) {
             console.error("Error eliminando la tarea:", error);
         }
     }
-
+    const signInWithGoogle = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            const res = await signInWithPopup(auth, provider);
+            if (!res.user) return
+            setUserInfo(res.user)
+        } catch (error) {
+            console.error('Error al iniciar sesión con Google', error);
+        }
+    }
     const valuesContext: ContextType = {
         userInfo,
         setUserInfo,
@@ -93,7 +104,8 @@ function ContextProvider({ children }: ContextProviderProps) {
         getAllTasksFromFirebase,
         addTaskToFirebase,
         updateTaskToFirebase,
-        deleteTaskToFirebase
+        deleteTaskToFirebase,
+        signInWithGoogle
     };
 
     useEffect(() => {

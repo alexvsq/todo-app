@@ -33,7 +33,10 @@ export default function page() {
     }
 
     return (
-        <form action="#" onSubmit={(e) => submitForm(e)}>
+        <form
+            action="#"
+            className=' flex flex-col gap-2'
+            onSubmit={(e) => submitForm(e)}>
             <label htmlFor="email" className='text-xl text-bluePrimary font-semibold'>Correo Electrónico</label>
             <input
                 onChange={(e) => setLogInfo({ ...logInfo, email: e.target.value })}
@@ -46,11 +49,13 @@ export default function page() {
                 className='bg-background rounded-2xl px-4 py-2 text-sm w-full'
                 type="password" placeholder='Contraseña'
             />
-            <button
-                type="submit"
-                className='bg-bluePrimary text-white px-4 py-2 rounded-2xl'>
-                Iniciar Sesión
-            </button>
+            <footer className=' my-2'>
+                <button
+                    type="submit"
+                    className='bg-bluePrimary text-white px-4 py-2 rounded-2xl'>
+                    Iniciar Sesión
+                </button>
+            </footer>
         </form>
     )
 }
